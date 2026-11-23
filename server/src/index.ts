@@ -1,0 +1,10 @@
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import { router } from "./routes";
+const app=express();
+app.use(cors({origin:process.env.WEB_ORIGIN||"http://localhost:5173"}));
+app.use(express.json({limit:"1mb"}));
+app.use("/api",router);
+app.use((err:unknown,_req:express.Request,res:express.Response,_next:express.NextFunction)=>{ if(err&&typeof err==="object"&&"issues" in err)return res.status(400).json({error:"Invalid request",details:(err as {issues:unknown}).issues}); console.error("Unhandled API error",err);res.status(500).json({error:"Internal server error"}); });
+const port=Number(process.env.PORT||3001);app.listen(port,()=>console.log(`DayFlow API listening on :${port}`));
