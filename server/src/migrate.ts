@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { pool } from "./db";
+import { pool } from "./db.js";
 const sql = `CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE TABLE IF NOT EXISTS tasks (id uuid PRIMARY KEY, title text NOT NULL, due_date text, priority text NOT NULL DEFAULT 'medium' CHECK (priority IN ('low','medium','high')), completed boolean NOT NULL DEFAULT false, category text NOT NULL DEFAULT '收件箱', created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
 CREATE INDEX IF NOT EXISTS tasks_due_date_idx ON tasks(due_date);
